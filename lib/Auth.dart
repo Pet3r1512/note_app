@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notexpert_mongo/style/app_style.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -17,19 +18,19 @@ class _SignInState extends State<SignIn> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 30),
-        padding: EdgeInsets.all(20),
-        child: const Column(children: [
-          TextField(
+        margin: const EdgeInsets.only(top: 30),
+        padding: const EdgeInsets.all(20),
+        child: Column(children: [
+          const TextField(
             decoration: InputDecoration(
               hintText: 'Username',
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          TextField(
+          const TextField(
             obscureText: true,
             enableSuggestions: false,
             autocorrect: false,
@@ -38,15 +39,15 @@ class _SignInState extends State<SignIn> {
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           TextButton(
-              style: ButtonStyle(
+              style: const ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll(Colors.pinkAccent),
               ),
-              onPressed: null,
-              child: Text(
+              onPressed: () {},
+              child: const Text(
                 "Sign In",
                 style: TextStyle(color: Colors.white),
               ))
@@ -67,24 +68,27 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppStyle.whitePink,
       appBar: AppBar(
-          title: const Center(
-        child: Text("Sign Up"),
-      )),
+        title: const Center(
+          child: Text("Sign Up"),
+        ),
+        backgroundColor: AppStyle.pink,
+      ),
       body: Container(
-        margin: EdgeInsets.only(top: 30),
-        padding: EdgeInsets.all(20),
-        child: const Column(children: [
-          TextField(
+        margin: const EdgeInsets.only(top: 30),
+        padding: const EdgeInsets.all(20),
+        child: Column(children: [
+          const TextField(
             decoration: InputDecoration(
               hintText: 'Username',
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          TextField(
+          const TextField(
             obscureText: true,
             enableSuggestions: false,
             autocorrect: false,
@@ -93,10 +97,10 @@ class _SignUpState extends State<SignUp> {
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          TextField(
+          const TextField(
             obscureText: true,
             enableSuggestions: false,
             autocorrect: false,
@@ -105,15 +109,15 @@ class _SignUpState extends State<SignUp> {
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           TextButton(
-              style: ButtonStyle(
+              style: const ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll(Colors.pinkAccent),
               ),
-              onPressed: null,
-              child: Text(
+              onPressed: () {},
+              child: const Text(
                 "Sign Up",
                 style: TextStyle(color: Colors.white),
               ))
