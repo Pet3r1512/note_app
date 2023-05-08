@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notexpert_mongo/style/app_style.dart';
 import 'package:notexpert_mongo/widgets/reusable_widgets.dart';
-import 'sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -48,7 +48,19 @@ class _SignUpState extends State<SignUp> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0)),
               onPressed: () {
-                Navigator.of(context).pop();
+                if (passController.text.compareTo(confirmController.text) ==
+                    0) {
+                  FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: emailController.text,
+                          password: passController.text)
+                      .then((value) {
+                    print("Success");
+                    Navigator.of(context).pop();
+                  }).onError((error, stackTrace) {
+                    print("Error ${error.toString()}");
+                  });
+                }
               },
               child: const Text(
                 "Sign Up",

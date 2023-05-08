@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notexpert_mongo/style/app_style.dart';
 import 'package:notexpert_mongo/screen/home.dart';
@@ -51,9 +52,17 @@ class _SignInState extends State<SignIn> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => Home(),
-                    ));
+                    FirebaseAuth.instance
+                        .signInWithEmailAndPassword(
+                            email: emailController.text,
+                            password: passController.text)
+                        .then((value) {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => Home(),
+                      ));
+                    }).onError((error, stackTrace) {
+                      print("Error ${error.toString()}");
+                    });
                   },
                   child: const Text(
                     "Sign In",
