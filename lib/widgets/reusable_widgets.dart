@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:notexpert_mongo/style/app_style.dart';
 
-TextField reusableTextField(
+TextFormField reusableTextField(
     String text, IconData icon, bool isPass, TextEditingController controller) {
-  return TextField(
+  return TextFormField(
     controller: controller,
     obscureText: isPass,
     enableSuggestions: !isPass,
