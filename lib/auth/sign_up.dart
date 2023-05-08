@@ -11,10 +11,13 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final confirmController = TextEditingController();
   late bool isObscure;
+  String? errorMsg = '';
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -31,14 +34,17 @@ class _SignUpState extends State<SignUp> {
         backgroundColor: AppStyle.pink,
       ),
       body: Form(
+        key: _key,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(children: [
-            reusableTextField("Email", Icons.person, false, emailController),
+            reusableTextField(
+                "Email", Icons.person, false, emailController, validateEmail),
             const SizedBox(
               height: 20,
             ),
             TextFormField(
+              validator: validatePassword,
               controller: passController,
               obscureText: isObscure,
               cursorColor: Colors.red,
@@ -113,29 +119,71 @@ class _SignUpState extends State<SignUp> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
                 onPressed: () {
-                  if (passController.text.compareTo(confirmController.text) ==
-                      0) {
-                    FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
+                  setState(() {
+                    isLoading = true;
+                  });
+
+                  if (_key.currentState!.validate()) {
+                    if (passController.text.compareTo(confirmController.text) ==
+                        0) {
+                      try {
+                        FirebaseAuth.instance.createUserWithEmailAndPassword(
                             email: emailController.text,
-                            password: passController.text)
-                        .then((value) {
-                      print("Success");
-                      Navigator.of(context).pop();
-                    }).onError((error, stackTrace) {
-                      print("Error ${error.toString()}");
+                            password: passController.text);
+                        errorMsg = '';
+
+                        Navigator.of(context).pop();
+                      } on FirebaseAuthException catch (err) {
+                        errorMsg = err.message;
+                      }
+                    } else {
+                      errorMsg = "Password does not match";
+                    }
+                    setState(() {
+                      isLoading = false;
                     });
                   }
                 },
-                child: const Text(
-                  "Sign Up",
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
-                ),
+                child: isLoading
+                    ? CircularProgressIndicator(
+                        color: AppStyle.whitePink,
+                      )
+                    : const Text(
+                        "Sign Up",
+                        style: TextStyle(color: Colors.white, fontSize: 18.0),
+                      ),
               ),
             ),
           ]),
         ),
       ),
     );
+  }
+
+  String? validateEmail(String? formEmail) {
+    if (formEmail == null || formEmail.isEmpty) {
+      return "Email address is required";
+    }
+
+    String pattern = r'\w+@\w+\.\w+';
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(formEmail)) return "Invalid Email Address";
+
+    return null;
+  }
+
+  String? validatePassword(String? formPassword) {
+    if (formPassword == null || formPassword.isEmpty) {
+      return "Password is required";
+    }
+    String pattern = r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}$';
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(formPassword)) {
+      return '''
+      Password must at least 6 characters,
+      Include an uppercase and number
+      ''';
+    }
+    return null;
   }
 }
